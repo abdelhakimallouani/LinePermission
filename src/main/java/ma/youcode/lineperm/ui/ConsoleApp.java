@@ -1,6 +1,5 @@
-package main.java.ma.youcode.lineperm.ui;
-import main.java.ma.youcode.lineperm.model.User;
-import main.java.ma.youcode.lineperm.service.UserService;
+package ma.youcode.lineperm.ui;
+import ma.youcode.lineperm.service.UserService;
 
 import java.util.Scanner;
 

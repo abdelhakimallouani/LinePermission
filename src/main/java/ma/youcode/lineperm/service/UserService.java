@@ -1,7 +1,7 @@
-package main.java.ma.youcode.lineperm.service;
+package ma.youcode.lineperm.service;
 import java.util.HashMap;
 import java.util.Map;
-import main.java.ma.youcode.lineperm.model.User;
+import ma.youcode.lineperm.model.User;
 
 public class UserService {
     private final Map<String, User> users ;

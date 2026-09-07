@@ -1,4 +1,4 @@
-package main.java.ma.youcode.lineperm.model;
+package ma.youcode.lineperm.model;
 
 public class User {
     private final String login;
