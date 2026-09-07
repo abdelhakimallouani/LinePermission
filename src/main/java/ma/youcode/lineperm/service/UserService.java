@@ -36,8 +36,26 @@ public class UserService {
         System.out.println("cmtp creer");
     }
 
-    public User login(String login, String passwordHash) {
+    public User login(String login, String password) {
+
+        if (login == null || login.isEmpty()) {
+            System.out.println("login invalide");
+            return null;
+        }
+        if (password == null || password.isEmpty()) {
+            System.out.println("password invalide");
+            return null;
+        }
+
         User user = users.get(login);
+
+        if (user == null || !user.getPasswordHash().equals(password)) {
+            System.out.println("login ou mot de passe incorrect");
+            return null;
+        }
+
+        System.out.println("login reussi");
+
         return user;
     }
 

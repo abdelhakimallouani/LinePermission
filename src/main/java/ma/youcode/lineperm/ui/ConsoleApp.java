@@ -27,6 +27,10 @@ public class ConsoleApp {
                     signup();
                     break;
 
+                case "login":
+                    login();
+                    break;
+
                 case "exit":
                     return;
 
@@ -45,5 +49,16 @@ public class ConsoleApp {
         String password = scanner.nextLine();
 
         userService.signUp(login, password);
+    }
+
+    private void login() {
+
+        System.out.print("Login: ");
+        String login = scanner.nextLine();
+
+        System.out.print("Password: ");
+        String password = scanner.nextLine();
+
+        userService.login(login, password);
     }
 }
