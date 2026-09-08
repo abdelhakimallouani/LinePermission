@@ -61,7 +61,7 @@ public class UserService {
             return null;
         }
 
-        User user = users.get(login);
+        User user = users.get(login.trim());
 
         // System.out.println(user);
 
@@ -98,8 +98,8 @@ public class UserService {
                     continue;
                 }
 
-                String login = parts[0];
-                String password = parts[1];
+                String login = parts[0].trim();
+                String password = parts[1].trim();
 
                 User user = new User(login, password);
 

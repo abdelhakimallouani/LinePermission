@@ -10,7 +10,7 @@ public class ConsoleApp {
     private final Scanner scanner;
     private final UserService userService;
 
-    private User currentUser ;
+    private User currentUser;
 
     public ConsoleApp() {
         scanner = new Scanner(System.in);
@@ -24,7 +24,6 @@ public class ConsoleApp {
         System.out.println("        Bienvenue dans LinePermission");
         System.out.println("============================================");
         System.out.println("Commandes : signup | login | help | exit" + "\n");
-
 
         while (true) {
 
@@ -90,13 +89,15 @@ public class ConsoleApp {
         try {
             User user = userService.login(login, password);
             currentUser = user;
-            
+
         } catch (Exception e) {
             System.out.println("Erreur lors de la connexion : " + e.getMessage());
         }
 
         if (currentUser != null) {
             System.out.println("Bienvenue " + currentUser.getLogin());
+            System.out.println("-------------------------------------");
+
         }
     }
 
