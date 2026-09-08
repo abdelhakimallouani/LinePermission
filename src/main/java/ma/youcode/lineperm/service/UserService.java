@@ -1,13 +1,25 @@
 package ma.youcode.lineperm.service;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.lang.model.element.ModuleElement.UsesDirective;
+
 import ma.youcode.lineperm.model.User;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class UserService {
+
+    private static final String USERS_FILE = "data/users.txt";
+
     private final Map<String, User> users ;
 
     public UserService() {
         this.users = new HashMap<>();
+        loadUsers();
     }
 
     public void signUp(String login, String password) {
@@ -27,11 +39,13 @@ public class UserService {
             return;
         }
 
-        String passwordHash = password;
+        String passwordHash = BCrypt.hashpw(password, BCrypt.gensalt());
 
         User user = new User(login, passwordHash);
 
         users.put(login, user);
+
+        saveUsers();
 
         System.out.println("cmtp creer");
     }
@@ -49,7 +63,9 @@ public class UserService {
 
         User user = users.get(login);
 
-        if (user == null || !user.getPasswordHash().equals(password)) {
+        // System.out.println(user);
+
+        if (!BCrypt.checkpw(password, user.getPasswordHash())) {
             System.out.println("login ou mot de passe incorrect");
             return null;
         }
@@ -58,5 +74,44 @@ public class UserService {
 
         return user;
     }
+
+    private void saveUsers() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(USERS_FILE))) {
+
+            for( User user : users.values()){
+                writer.write(user.getLogin() + " : " + user.getPasswordHash());
+                writer.newLine();
+            }
+            
+        } catch (Exception e) {
+            System.out.println("Erreur de save users");
+        }
+    }
+    private void loadUsers() {
+        try (BufferedReader reader = new BufferedReader(new FileReader(USERS_FILE))) {
+
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(":", 2);
+                if (parts.length != 2) {
+                    continue;
+                }
+
+                String login = parts[0];
+                String password = parts[1];
+
+                User user = new User(login, password);
+
+                users.put(login, user);
+                
+            }
+            
+        } catch (Exception e) {
+            System.out.println("Erreur de charge users");
+        }
+    }
+
+
 
 }
