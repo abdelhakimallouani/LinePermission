@@ -15,7 +15,7 @@ public class UserService {
 
     private static final String USERS_FILE = "data/users.txt";
 
-    private final Map<String, User> users ;
+    private final Map<String, User> users  ;
 
     public UserService() {
         this.users = new HashMap<>();
