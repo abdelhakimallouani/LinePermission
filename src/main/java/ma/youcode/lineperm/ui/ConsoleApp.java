@@ -69,6 +69,9 @@ public class ConsoleApp {
                 case "ls":
                     ls();
                     break;
+                case "cat":
+                    cat(mots[1]);
+                    break;
                 case "exit":
                     System.out.println("Au revoir.");
                     return;
@@ -147,8 +150,12 @@ public class ConsoleApp {
         }
     }
 
-    private void ls(){
+    private void ls() {
         fileService.ls();
+    }
+
+    private void cat(String fileName) {
+        fileService.cat(fileName);
     }
 
 }

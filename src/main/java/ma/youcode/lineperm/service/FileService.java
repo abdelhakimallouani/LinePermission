@@ -14,7 +14,6 @@ public class FileService {
     private static final Path FILES_DIRECTORY = Path.of("data/files");
     private static final Path FILE_FILES = Path.of("data/files.txt");
 
-
     public FileService() {
         try {
             if (!Files.exists(FILES_DIRECTORY)) {
@@ -41,10 +40,9 @@ public class FileService {
             LinFile file = new LinFile(name, owner, Permission.Normale);
 
             String fileWrite = "rwd|" + Permission.Normale.getValue() + " " + owner + " " + name;
-            
+
             Files.writeString(FILE_FILES, fileWrite + System.lineSeparator(), StandardOpenOption.APPEND);
 
-        
             return file;
 
         } catch (Exception e) {
@@ -53,13 +51,36 @@ public class FileService {
         }
     }
 
-    public void ls(){
+    public void ls() {
         try {
 
             String content = Files.readString(FILE_FILES);
 
             System.out.println(content);
-            
+
+        } catch (Exception e) {
+            System.out.println("u dont have files" + e.getMessage());
+        }
+    }
+
+    public void cat(String fileName) {
+        try {
+
+            Path filePath = Path.of("data/files/" + fileName);
+
+            if (!Files.exists(filePath)) {
+                System.out.println("u dont have this file");
+                return;
+            }
+
+            String content = Files.readString(filePath);
+
+            if(content.isEmpty()){
+                System.out.println("ur file is vide");
+            }
+
+            System.out.println(content);
+
         } catch (Exception e) {
             System.out.println("u dont have files" + e.getMessage());
         }
