@@ -20,7 +20,7 @@ public enum Permission {
 
         for (Permission permission : Permission.values()) {
 
-            if (permission.getValue().equals(value)) {
+            if (value.contains(permission.getValue())) {
                 return permission;
             }
         }

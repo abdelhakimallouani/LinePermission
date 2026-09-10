@@ -63,19 +63,36 @@ public class FileService {
         }
     }
 
-    public void cat(String fileName) {
+    public void cat(String fileName, String owner) {
         try {
 
             Path filePath = Path.of("data/files/" + fileName);
 
-            if (!Files.exists(filePath)) {
-                System.out.println("u dont have this file");
-                return;
+            LinFile file = UserService.filesMap.get(fileName);
+
+            // if (!Files.exists(filePath)) {
+            // System.out.println("You don't have this file");
+            // return;
+            // }
+
+            // if (file == null) {
+            //     System.out.println("File not found");
+            //     return;
+            // }
+
+            Permission permission = file.getPermission();
+
+            if (!file.getOwner().equals(owner)) {
+
+                if (!permission.getValue().contains("r")) {
+                    System.out.println("u dont have permission");
+                    return;
+                }
             }
 
             String content = Files.readString(filePath);
 
-            if(content.isEmpty()){
+            if (content.isEmpty()) {
                 System.out.println("ur file is vide");
             }
 
@@ -86,5 +103,6 @@ public class FileService {
         }
     }
 
-    public void nano(){}
+    public void nano() {
+    }
 }

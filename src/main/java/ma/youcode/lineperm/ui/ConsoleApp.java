@@ -70,7 +70,7 @@ public class ConsoleApp {
                     ls();
                     break;
                 case "cat":
-                    cat(mots[1]);
+                    cat(mots[1],currentUser.getLogin());
                     break;
                 case "exit":
                     System.out.println("Au revoir.");
@@ -154,8 +154,8 @@ public class ConsoleApp {
         fileService.ls();
     }
 
-    private void cat(String fileName) {
-        fileService.cat(fileName);
+    private void cat(String fileName,String owner) {
+        fileService.cat(fileName,owner);
     }
 
 }

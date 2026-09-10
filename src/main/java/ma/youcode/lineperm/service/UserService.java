@@ -20,11 +20,11 @@ public class UserService {
     private static final String FILE_FILES = "data/files.txt";
 
     private final Map<String, User> users;
-    private final Map<String, LinFile> filesMap;
+    public static Map<String, LinFile> filesMap;
 
     public UserService() {
         this.users = new HashMap<>();
-        this.filesMap = new HashMap<>();
+        filesMap = new HashMap<>();
         loadUsers();
         loadFiles();
     }
@@ -135,7 +135,16 @@ public class UserService {
                 String owner = parts[1].trim();
                 String fileName = parts[2].trim();
 
+                // System.out.println(permessionValue + owner + fileName);
+
                 Permission permission = Permission.fromValue(permessionValue);
+                // System.out.println("khedama " + permission);
+
+                // if (permission == null) {
+                // System.out.println(
+                // "Permission invalide : " + permessionValue);
+                // continue;
+                // }
 
                 LinFile linfile = new LinFile(fileName, owner, permission);
 
