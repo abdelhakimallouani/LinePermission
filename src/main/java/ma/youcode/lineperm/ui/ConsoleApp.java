@@ -1,20 +1,26 @@
 package ma.youcode.lineperm.ui;
 
+import ma.youcode.lineperm.model.LinFile;
 import ma.youcode.lineperm.model.User;
 import ma.youcode.lineperm.service.UserService;
 
 import java.util.Scanner;
 
+import ma.youcode.lineperm.service.FileService;
+import ma.youcode.lineperm.service.FileService;
+
 public class ConsoleApp {
 
     private final Scanner scanner;
     private final UserService userService;
+    private final FileService fileService;
 
     private User currentUser;
 
     public ConsoleApp() {
         scanner = new Scanner(System.in);
         userService = new UserService();
+        fileService = new FileService();
         currentUser = null;
     }
 
@@ -56,13 +62,16 @@ public class ConsoleApp {
                 case "help":
                     help();
                     break;
-
+                
+                case "touch":
+                    touch(mots);
+                    break;
                 case "exit":
                     System.out.println("Au revoir.");
                     return;
 
                 default:
-                    System.out.println("Commande inconnue.");
+                    System.out.println("Commande inconnue. Tape 'help'");
             }
         }
     }
@@ -111,7 +120,27 @@ public class ConsoleApp {
         if (currentUser == null) {
             System.out.println("Commandes : signup | login | help | exit");
         } else {
-            System.out.println("Commandes : logout | help | exit");
+            System.out.println("Commandes : logout | help | exit | touch");
+        }
+    }
+
+    private void touch(String[] mots){
+        if (currentUser == null) {
+            System.out.println("u are conneted");
+            return;
+        }
+
+            if (mots.length != 2) {
+        System.out.println("Usage : touch <nom_fichier>");
+        return;
+        }
+
+        String fileName = mots[1];
+
+        LinFile file = fileService.touch(fileName, currentUser.getLogin());
+
+        if (file != null) {
+            System.out.println("Fichier created" + fileName);
         }
     }
 }
