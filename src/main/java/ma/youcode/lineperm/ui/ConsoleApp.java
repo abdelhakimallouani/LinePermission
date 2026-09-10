@@ -62,9 +62,12 @@ public class ConsoleApp {
                 case "help":
                     help();
                     break;
-                
+
                 case "touch":
                     touch(mots);
+                    break;
+                case "ls":
+                    ls();
                     break;
                 case "exit":
                     System.out.println("Au revoir.");
@@ -124,15 +127,15 @@ public class ConsoleApp {
         }
     }
 
-    private void touch(String[] mots){
+    private void touch(String[] mots) {
         if (currentUser == null) {
             System.out.println("u are conneted");
             return;
         }
 
-            if (mots.length != 2) {
-        System.out.println("Usage : touch <nom_fichier>");
-        return;
+        if (mots.length != 2) {
+            System.out.println("Usage : touch <nom_fichier>");
+            return;
         }
 
         String fileName = mots[1];
@@ -140,7 +143,12 @@ public class ConsoleApp {
         LinFile file = fileService.touch(fileName, currentUser.getLogin());
 
         if (file != null) {
-            System.out.println("Fichier created" + fileName);
+            System.out.println("Fichier created : " + fileName);
         }
     }
+
+    private void ls(){
+        fileService.ls();
+    }
+
 }
