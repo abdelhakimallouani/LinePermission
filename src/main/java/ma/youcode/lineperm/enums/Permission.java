@@ -8,11 +8,23 @@ public enum Permission {
 
     private final String value;
 
-    Permission(String value){
+    Permission(String value) {
         this.value = value;
     }
 
     public String getValue() {
         return value;
+    }
+
+    public static Permission fromValue(String value) {
+
+        for (Permission permission : Permission.values()) {
+
+            if (permission.getValue().equals(value)) {
+                return permission;
+            }
+        }
+
+        return null;
     }
 }

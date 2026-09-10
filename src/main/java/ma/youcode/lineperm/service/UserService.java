@@ -1,4 +1,5 @@
 package ma.youcode.lineperm.service;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -9,32 +10,38 @@ import java.util.Map;
 import javax.lang.model.element.ModuleElement.UsesDirective;
 
 import ma.youcode.lineperm.model.User;
+import ma.youcode.lineperm.model.LinFile;
+import ma.youcode.lineperm.enums.Permission;
 import org.mindrot.jbcrypt.BCrypt;
 
 public class UserService {
 
     private static final String USERS_FILE = "data/users.txt";
+    private static final String FILE_FILES = "data/files.txt";
 
-    private final Map<String, User> users  ;
+    private final Map<String, User> users;
+    private final Map<String, LinFile> filesMap;
 
     public UserService() {
         this.users = new HashMap<>();
+        this.filesMap = new HashMap<>();
         loadUsers();
+        loadFiles();
     }
 
     public void signUp(String login, String password) {
 
         login = login.trim();
 
-        if (login.isEmpty()){
+        if (login.isEmpty()) {
             System.out.println("login invalide");
             return;
         }
-        if (users.containsKey(login)){
+        if (users.containsKey(login)) {
             System.out.println("login deja use");
             return;
         }
-        if (password == null || password.isEmpty()){
+        if (password == null || password.isEmpty()) {
             System.out.println("password invalide");
             return;
         }
@@ -78,15 +85,16 @@ public class UserService {
     private void saveUsers() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(USERS_FILE))) {
 
-            for( User user : users.values()){
+            for (User user : users.values()) {
                 writer.write(user.getLogin() + " : " + user.getPasswordHash());
                 writer.newLine();
             }
-            
+
         } catch (Exception e) {
             System.out.println("Erreur de save users");
         }
     }
+
     private void loadUsers() {
         try (BufferedReader reader = new BufferedReader(new FileReader(USERS_FILE))) {
 
@@ -104,14 +112,43 @@ public class UserService {
                 User user = new User(login, password);
 
                 users.put(login, user);
-                
+
             }
-            
+
         } catch (Exception e) {
             System.out.println("Erreur de charge users");
         }
     }
 
+    private void loadFiles() {
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_FILES))) {
 
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(" ", 3);
+                if (parts.length != 3) {
+                    continue;
+                }
+
+                String permessionValue = parts[0].trim();
+                String owner = parts[1].trim();
+                String fileName = parts[2].trim();
+
+                Permission permission = Permission.fromValue(permessionValue);
+
+                LinFile linfile = new LinFile(fileName, owner, permission);
+
+                filesMap.put(fileName, linfile);
+
+            }
+
+            System.out.println(filesMap);
+            // System.out.println("helloo hakim");
+
+        } catch (Exception e) {
+            System.out.println("Erreur de charge des fichiers");
+        }
+    }
 
 }
