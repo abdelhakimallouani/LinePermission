@@ -2,6 +2,7 @@ package ma.youcode.lineperm.service;
 
 import ma.youcode.lineperm.enums.Permission;
 import ma.youcode.lineperm.model.LinFile;
+import ma.youcode.lineperm.model.User;
 
 import java.util.*;
 import java.io.File;
@@ -30,6 +31,7 @@ public class FileService {
     public LinFile touch(String name, String owner) {
 
         try {
+            
             Path filePath = FILES_DIRECTORY.resolve(name);
 
             if (Files.exists(filePath)) {
@@ -45,6 +47,8 @@ public class FileService {
             String fileWrite = "rwd|" + Permission.Normale.getValue() + " " + owner + " " + name;
 
             Files.writeString(FILE_FILES, fileWrite + System.lineSeparator(), StandardOpenOption.APPEND);
+
+            UserService.filesMap.put(name, file);
 
             return file;
 
@@ -167,7 +171,7 @@ public class FileService {
 
             }
 
-            Files.writeString(filePath, content,StandardOpenOption.APPEND);
+            Files.writeString(filePath, content, StandardOpenOption.APPEND);
 
             System.out.println("File : " + fileName + ", enregister (" + lineCount + " ligne)");
 
@@ -175,5 +179,56 @@ public class FileService {
             System.out.println("Erreur lors de l'édition : " + e.getMessage());
         }
 
+    }
+
+    public void chmod(String fileName, String permissionValue, String owner) {
+
+        try {
+
+            LinFile file = UserService.filesMap.get(fileName);
+
+            if (file == null) {
+                System.out.println("File not found");
+                return;
+            }
+
+            if (!file.getOwner().equals(owner)) {
+                System.out.println("You are not the owner of this file");
+                return;
+            }
+
+            Permission permission = null;
+
+            switch (permissionValue) {
+                case "r":
+                    permission = Permission.R;
+                    break;
+                case "-":
+                    permission = Permission.Normale;
+                    break;
+                case "rw":
+                    permission = Permission.RW;
+                    break;
+
+                default:
+                    System.out.println("Invalid permission value. Use 'r', 'rw','-'");
+                    break;
+            }
+
+            file.setPermission(permission);
+             List<String> lines = Files.readAllLines(FILE_FILES);
+            for(int i=0; i<lines.size(); i++){
+                String[] parts = lines.get(i).split(" ", 3);
+                if(parts.length == 3 && parts[1].equals(owner) && parts[2].equals(fileName)){
+                    lines.set(i, "rwd|" + permission.getValue() + " " + owner + " " + fileName);
+                    break;
+                }
+            }
+            Files.write(FILE_FILES, lines);
+            System.out.println("Permission updated for file: " + fileName + " to " + permission.getValue());
+
+        } catch (Exception e) {
+            System.out.println("Error updating permissions in files.txt: " + e.getMessage());
+        }
     }
 }

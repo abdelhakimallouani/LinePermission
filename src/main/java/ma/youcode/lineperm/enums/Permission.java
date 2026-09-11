@@ -4,7 +4,7 @@ public enum Permission {
     Normale("---"),
     R("r--"),
     W("w--"),
-    WR("rw-");
+    RW("rw-");
 
     private final String value;
 
