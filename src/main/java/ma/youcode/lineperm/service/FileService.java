@@ -167,7 +167,7 @@ public class FileService {
 
             }
 
-            Files.writeString(filePath, content.toString());
+            Files.writeString(filePath, content,StandardOpenOption.APPEND);
 
             System.out.println("File : " + fileName + ", enregister (" + lineCount + " ligne)");
 
