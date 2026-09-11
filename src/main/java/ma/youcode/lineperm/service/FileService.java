@@ -13,8 +13,11 @@ public class FileService {
 
     private static final Path FILES_DIRECTORY = Path.of("data/files");
     private static final Path FILE_FILES = Path.of("data/files.txt");
+    private final Scanner scanner;
 
-    public FileService() {
+    public FileService(Scanner scanner) {
+        this.scanner = scanner;
+
         try {
             if (!Files.exists(FILES_DIRECTORY)) {
                 Files.createDirectories(FILES_DIRECTORY);
@@ -70,15 +73,15 @@ public class FileService {
 
             LinFile file = UserService.filesMap.get(fileName);
 
-            // if (!Files.exists(filePath)) {
-            // System.out.println("You don't have this file");
-            // return;
-            // }
+            if (!Files.exists(filePath)) {
+                System.out.println("You don't have this file");
+                return;
+            }
 
-            // if (file == null) {
-            //     System.out.println("File not found");
-            //     return;
-            // }
+            if (file == null) {
+                System.out.println("File not found");
+                return;
+            }
 
             Permission permission = file.getPermission();
 
@@ -103,6 +106,74 @@ public class FileService {
         }
     }
 
-    public void nano() {
+    public void nano(String fileName, String owner) {
+        Path filePath = Path.of("data/files/" + fileName);
+
+        LinFile file = UserService.filesMap.get(fileName);
+
+        if (!Files.exists(filePath)) {
+            System.out.println("You don't have this file");
+            return;
+        }
+
+        if (file == null) {
+            System.out.println("File not found");
+            return;
+        }
+
+        Permission permission = file.getPermission();
+
+        // System.out.println(permission.getValue());
+
+        if (!file.getOwner().equals(owner)) {
+
+            if (!permission.getValue().contains("rw")) {
+                System.out.println("u dont have permission");
+                return;
+            }
+        }
+
+        try {
+
+            System.out.println("Saisis ton texte. Tape EOF seul sur une ligne pour enregistrer.");
+
+            String oldContent = Files.readString(filePath);
+
+            if (oldContent.isEmpty()) {
+
+                System.out.println("file is vide ");
+
+            } else {
+
+                System.out.println(oldContent);
+            }
+
+            StringBuilder content = new StringBuilder();
+
+            int lineCount = 0;
+
+            while (true) {
+
+                String line = scanner.nextLine();
+
+                if (line.equals("EOF")) {
+                    break;
+                }
+
+                content.append(line);
+                content.append(System.lineSeparator());
+
+                lineCount++;
+
+            }
+
+            Files.writeString(filePath, content.toString());
+
+            System.out.println("File : " + fileName + ", enregister (" + lineCount + " ligne)");
+
+        } catch (Exception e) {
+            System.out.println("Erreur lors de l'édition : " + e.getMessage());
+        }
+
     }
 }

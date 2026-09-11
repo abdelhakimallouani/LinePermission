@@ -20,7 +20,7 @@ public class ConsoleApp {
     public ConsoleApp() {
         scanner = new Scanner(System.in);
         userService = new UserService();
-        fileService = new FileService();
+        fileService = new FileService(scanner);
         currentUser = null;
     }
 
@@ -70,7 +70,10 @@ public class ConsoleApp {
                     ls();
                     break;
                 case "cat":
-                    cat(mots[1],currentUser.getLogin());
+                    cat(mots[1], currentUser.getLogin());
+                    break;
+                case "nano":
+                    nano(mots);;
                     break;
                 case "exit":
                     System.out.println("Au revoir.");
@@ -154,8 +157,20 @@ public class ConsoleApp {
         fileService.ls();
     }
 
-    private void cat(String fileName,String owner) {
-        fileService.cat(fileName,owner);
+    private void cat(String fileName, String owner) {
+        fileService.cat(fileName, owner);
+    }
+
+    private void nano(String[] mots) {
+
+        if (mots.length != 2) {
+            System.out.println("use : nano <file>");
+        }
+
+        String fileName = mots[1];
+
+        fileService.nano(fileName, currentUser.getLogin());
+
     }
 
 }

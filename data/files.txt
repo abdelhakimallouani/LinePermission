@@ -1,2 +1,2 @@
-rwd|Normale hakim text.txt
-rwd|--- hakim text1.txt
+rwd|r-- hakim text.txt
+rwd|rw- hakim text1.txt

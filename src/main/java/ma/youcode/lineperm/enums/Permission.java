@@ -2,9 +2,9 @@ package ma.youcode.lineperm.enums;
 
 public enum Permission {
     Normale("---"),
-    R("r"),
-    W("w"),
-    WR("wr");
+    R("r--"),
+    W("w--"),
+    WR("rw-");
 
     private final String value;
 
